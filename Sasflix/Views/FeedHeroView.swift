@@ -1,0 +1,24 @@
+import SwiftUI
+
+struct FeedHeroView: View {
+	let item: FeedItem
+
+	var body: some View {
+		VStack(alignment: .leading) {
+			RemotePosterView(url: item.posterURL)
+
+			MetadataBadgeView(title: item.category.title, systemImage: item.category.systemImage)
+
+			Text(item.title)
+				.font(.title2)
+				.bold()
+				.lineLimit(3)
+
+			Text(item.publishedAt, format: .dateTime.day().month(.wide).year().hour().minute())
+				.font(.subheadline)
+				.foregroundStyle(.secondary)
+		}
+		.padding()
+		.background(.regularMaterial, in: .rect(cornerRadius: 8))
+	}
+}
