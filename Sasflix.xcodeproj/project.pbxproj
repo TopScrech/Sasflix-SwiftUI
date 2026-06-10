@@ -6,6 +6,10 @@
 	objectVersion = 100;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F38761272FDA2C1C00A0340F /* ScrechKit in Frameworks */ = {isa = PBXBuildFile; productRef = F38761242FDA2B4E00A0340F /* ScrechKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		100000000000000000000001 /* AGENTS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AGENTS; sourceTree = "<group>"; };
 		200000000000000000000016 /* Sasflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sasflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,18 +50,34 @@
 			buildPhases = (
 				500000000000000000000001 /* Sources */,
 				500000000000000000000002 /* Resources */,
+				F38761282FDA2C1C00A0340F /* Frameworks */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				F38761262FDA2B9500A0340F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F3875FDE2FDA1A3B00A0340F /* Sasflix */,
 			);
 			name = Sasflix;
+			packageProductDependencies = (
+				F38761242FDA2B4E00A0340F /* ScrechKit */,
+			);
 			productName = SasflixMobile;
 			productReference = 200000000000000000000016 /* Sasflix.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F38761282FDA2C1C00A0340F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				F38761272FDA2C1C00A0340F /* ScrechKit in Frameworks */,
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXProject section */
 		600000000000000000000001 /* Project object */ = {
@@ -81,6 +101,9 @@
 			);
 			mainGroup = 300000000000000000000001;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F38761232FDA2B4E00A0340F /* XCRemoteSwiftPackageReference "ScrechKit" */,
+			);
 			preferredProjectObjectVersion = 100;
 			productRefGroup = 300000000000000000000008 /* Products */;
 			projectDirPath = "";
@@ -106,6 +129,13 @@
 			);
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F38761262FDA2B9500A0340F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = F38761252FDA2B9500A0340F /* ScrechKit */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		800000000000000000000001 /* Debug configuration for PBXProject "Sasflix" */ = {
@@ -310,6 +340,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F38761232FDA2B4E00A0340F /* XCRemoteSwiftPackageReference "ScrechKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TopScrech/ScrechKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F38761242FDA2B4E00A0340F /* ScrechKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F38761232FDA2B4E00A0340F /* XCRemoteSwiftPackageReference "ScrechKit" */;
+			productName = ScrechKit;
+		};
+		F38761252FDA2B9500A0340F /* ScrechKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F38761232FDA2B4E00A0340F /* XCRemoteSwiftPackageReference "ScrechKit" */;
+			productName = ScrechKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 600000000000000000000001 /* Project object */;
 }

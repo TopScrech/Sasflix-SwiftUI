@@ -1,4 +1,4 @@
-import SwiftUI
+import ScrechKit
 
 struct AccountSettings: View {
 	@Environment(\.openURL) private var openURL
@@ -6,7 +6,7 @@ struct AccountSettings: View {
 
 	var body: some View {
 		List {
-			Section("Аккаунт") {
+			Section {
 				if let user = authStore.user {
 					LabeledContent("Пользователь", value: user.displayName)
 
@@ -22,7 +22,7 @@ struct AccountSettings: View {
 					NavigationLink {
 						SignInView(authStore: authStore)
 					} label: {
-						Label("Войти", systemImage: "person.crop.circle.badge.checkmark")
+						Label("Войти", systemImage: "person.crop.circle")
 					}
 				}
 			}
@@ -51,8 +51,10 @@ struct AccountSettings: View {
 
 			Section("О приложении") {
 				LabeledContent("Источник", value: "sasflix.ru/rss.xml")
-				LabeledContent("Версия", value: "0.1")
-				LabeledContent("Сборка", value: "0")
+
+				if let version = Bundle.version {
+					LabeledContent("Версия", value: "v\(version)")
+				}
 			}
 		}
 		.navigationTitle("Аккаунт")
