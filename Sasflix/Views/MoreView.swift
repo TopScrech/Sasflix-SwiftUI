@@ -10,6 +10,12 @@ struct MoreView: View {
 				if let user = authStore.user {
 					LabeledContent("Пользователь", value: user.displayName)
 
+					NavigationLink {
+						ViewingHistoryView()
+					} label: {
+						Label("История просмотра", systemImage: "clock.arrow.circlepath")
+					}
+
 					Button("Выйти", systemImage: "rectangle.portrait.and.arrow.right", action: signOut)
 						.disabled(authStore.isLoading)
 				} else {

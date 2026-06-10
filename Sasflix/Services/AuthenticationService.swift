@@ -58,7 +58,7 @@ nonisolated struct AuthenticationService: Sendable {
 		}
 	}
 
-	func loadFavoriteTopics(token: String, offset: Int, limit: Int) async throws -> FavoriteTopicsResponse {
+	func loadFavoriteTopics(token: String, offset: Int, limit: Int) async throws -> SasflixTopicsResponse {
 		let request = try makeRequest(
 			path: "user/favorite/topics",
 			method: "GET",
@@ -69,7 +69,21 @@ nonisolated struct AuthenticationService: Sendable {
 			]
 		)
 		let data = try await responseData(for: request)
-		return try JSONDecoder().decode(FavoriteTopicsResponse.self, from: data)
+		return try JSONDecoder().decode(SasflixTopicsResponse.self, from: data)
+	}
+
+	func loadViewingHistory(token: String, offset: Int, limit: Int) async throws -> SasflixTopicsResponse {
+		let request = try makeRequest(
+			path: "user/views",
+			method: "GET",
+			token: token,
+			queryItems: [
+				URLQueryItem(name: "offset", value: String(offset)),
+				URLQueryItem(name: "limit", value: String(limit))
+			]
+		)
+		let data = try await responseData(for: request)
+		return try JSONDecoder().decode(SasflixTopicsResponse.self, from: data)
 	}
 
 	func loadTopic(uuid: String, token: String? = nil) async throws -> SasflixTopic {

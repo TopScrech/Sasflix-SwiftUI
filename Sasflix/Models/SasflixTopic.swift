@@ -1,10 +1,11 @@
 import Foundation
 
-nonisolated struct SasflixTopic: Decodable, Sendable {
+nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
 	let id: Int
 	let uuid: String
 	let title: String
 	let publishedAt: Date
+	let watchedAt: Date?
 	let cover: SasflixTopicCover?
 	let category: SasflixTopicCategory?
 	let favoriteAt: Date?
@@ -36,6 +37,7 @@ nonisolated struct SasflixTopic: Decodable, Sendable {
 	enum CodingKeys: String, CodingKey {
 		case id, uuid, title, cover, category
 		case publishedAt = "published_at"
+		case watchedAt = "watched_at"
 		case favoriteAt = "favorite_at"
 	}
 
@@ -48,6 +50,7 @@ nonisolated struct SasflixTopic: Decodable, Sendable {
 		cover = try? container.decodeIfPresent(SasflixTopicCover.self, forKey: .cover)
 		category = try? container.decodeIfPresent(SasflixTopicCategory.self, forKey: .category)
 		publishedAt = container.decodeFlexibleString(forKey: .publishedAt)?.sasflixDate ?? .distantPast
+		watchedAt = container.decodeFlexibleString(forKey: .watchedAt)?.sasflixDate
 		favoriteAt = container.decodeFlexibleString(forKey: .favoriteAt)?.sasflixDate
 	}
 }

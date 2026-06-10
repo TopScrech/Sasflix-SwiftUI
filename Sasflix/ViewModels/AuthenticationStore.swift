@@ -8,10 +8,14 @@ final class AuthenticationStore {
 	var password = ""
 	var user: AuthenticatedUser?
 	var paymentHistory: [PaymentHistoryItem] = []
+	var viewingHistory: [SasflixTopic] = []
+	var viewingHistoryTotal = 0
 	var isLoading = false
 	var isPaymentHistoryLoading = false
+	var isViewingHistoryLoading = false
 	var errorMessage: String?
 	var paymentHistoryErrorMessage: String?
+	var viewingHistoryErrorMessage: String?
 
 	private let service: AuthenticationService
 	private let tokenStore: AuthenticationTokenStore
@@ -20,6 +24,10 @@ final class AuthenticationStore {
 
 	var canSubmit: Bool {
 		!trimmedUsername.isEmpty && !password.isEmpty && !isLoading
+	}
+
+	var canLoadMoreViewingHistory: Bool {
+		!isViewingHistoryLoading && viewingHistory.count < viewingHistoryTotal
 	}
 
 	init(service: AuthenticationService = AuthenticationService(), tokenStore: AuthenticationTokenStore = AuthenticationTokenStore()) {
@@ -107,6 +115,62 @@ final class AuthenticationStore {
 		}
 	}
 
+	func loadViewingHistoryIfNeeded() async {
+		guard viewingHistory.isEmpty else {
+			return
+		}
+
+		await loadViewingHistory()
+	}
+
+	func loadViewingHistory(reset: Bool = true) async {
+		guard let token else {
+			viewingHistory = []
+			viewingHistoryTotal = 0
+			viewingHistoryErrorMessage = nil
+			logger.debug("viewing_history_load_skipped reason=missing_token")
+			return
+		}
+
+		guard !isViewingHistoryLoading else {
+			logger.debug("viewing_history_load_skipped reason=already_loading")
+			return
+		}
+
+		isViewingHistoryLoading = true
+		viewingHistoryErrorMessage = nil
+		defer { isViewingHistoryLoading = false }
+
+		let offset = reset ? 0 : viewingHistory.count
+
+		do {
+			let response = try await service.loadViewingHistory(token: token, offset: offset, limit: 20)
+
+			if reset {
+				viewingHistory = response.rows
+			} else {
+				viewingHistory.append(contentsOf: response.rows)
+			}
+
+			viewingHistoryTotal = response.total
+			logger.info("viewing_history_load_finished rows=\(response.rows.count, privacy: .public) total=\(response.total, privacy: .public)")
+		} catch AuthenticationRequestError.unauthorized {
+			viewingHistoryErrorMessage = "Не удалось загрузить историю просмотра"
+			logger.warning("viewing_history_load_failed reason=unauthorized")
+		} catch {
+			viewingHistoryErrorMessage = "Не удалось загрузить историю просмотра"
+			logger.error("viewing_history_load_failed error=\(String(describing: error), privacy: .public)")
+		}
+	}
+
+	func loadMoreViewingHistory() async {
+		guard canLoadMoreViewingHistory else {
+			return
+		}
+
+		await loadViewingHistory(reset: false)
+	}
+
 	func signOut() async {
 		let activeToken = token
 		clearSession()
@@ -125,8 +189,11 @@ final class AuthenticationStore {
 		tokenStore.deleteToken()
 		user = nil
 		paymentHistory = []
+		viewingHistory = []
+		viewingHistoryTotal = 0
 		password = ""
 		errorMessage = nil
 		paymentHistoryErrorMessage = nil
+		viewingHistoryErrorMessage = nil
 	}
 }
