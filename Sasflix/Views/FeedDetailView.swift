@@ -9,7 +9,7 @@ struct FeedDetailView: View {
 	var body: some View {
 		ScrollView {
 			VStack(alignment: .leading) {
-				RemotePosterView(url: item.posterURL)
+				TopicPlaybackSectionView(item: item)
 
 				MetadataBadgeView(title: item.category.title, systemImage: item.category.systemImage)
 

@@ -9,6 +9,9 @@ nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
 	let cover: SasflixTopicCover?
 	let category: SasflixTopicCategory?
 	let favoriteAt: Date?
+	let access: Bool
+	let hasVideo: Bool
+	let video: SasflixVideo?
 
 	var link: URL? {
 		guard !uuid.isEmpty else {
@@ -35,10 +38,11 @@ nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
 	}
 
 	enum CodingKeys: String, CodingKey {
-		case id, uuid, title, cover, category
+		case id, uuid, title, cover, category, access, video
 		case publishedAt = "published_at"
 		case watchedAt = "watched_at"
 		case favoriteAt = "favorite_at"
+		case hasVideo = "has_video"
 	}
 
 	init(from decoder: Decoder) throws {
@@ -49,6 +53,9 @@ nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
 		title = (try? container.decode(String.self, forKey: .title)) ?? ""
 		cover = try? container.decodeIfPresent(SasflixTopicCover.self, forKey: .cover)
 		category = try? container.decodeIfPresent(SasflixTopicCategory.self, forKey: .category)
+		video = try? container.decodeIfPresent(SasflixVideo.self, forKey: .video)
+		access = container.decodeFlexibleBool(forKey: .access) ?? false
+		hasVideo = container.decodeFlexibleBool(forKey: .hasVideo) ?? (video != nil)
 		publishedAt = container.decodeFlexibleString(forKey: .publishedAt)?.sasflixDate ?? .distantPast
 		watchedAt = container.decodeFlexibleString(forKey: .watchedAt)?.sasflixDate
 		favoriteAt = container.decodeFlexibleString(forKey: .favoriteAt)?.sasflixDate
