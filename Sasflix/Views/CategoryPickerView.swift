@@ -8,7 +8,7 @@ struct CategoryPickerView: View {
 			HStack {
 				ForEach(FeedCategory.allCases) { category in
 					Button(category.title, systemImage: category.systemImage) {
-						selectedCategory = category
+						selectedCategory = selectedCategory == category ? .all : category
 					}
 					.buttonStyle(.bordered)
 					.controlSize(.small)
