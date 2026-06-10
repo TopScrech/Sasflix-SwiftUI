@@ -22,7 +22,7 @@ struct ContentView: View {
 
 			Tab(AppTab.more.title, systemImage: AppTab.more.systemImage, value: AppTab.more) {
 				NavigationStack {
-					MoreView()
+					AccountSettings()
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MoreView: View {
+struct AccountSettings: View {
 	@Environment(\.openURL) private var openURL
 	@Environment(AuthenticationStore.self) private var authStore
 
