@@ -49,7 +49,7 @@ struct MoreView: View {
 				LabeledContent("Сборка", value: "0")
 			}
 		}
-		.navigationTitle("Ещё")
+		.navigationTitle("Аккаунт")
 	}
 
 	private func openSite() {

@@ -1,15 +1,15 @@
-import Foundation
+import SwiftUI
 
 nonisolated enum AppTab: Hashable, CaseIterable, Identifiable, Sendable {
 	case feed, saved, more
 
 	var id: Self { self }
 
-	var title: String {
+	var title: LocalizedStringKey {
 		switch self {
 		case .feed: "Лента"
 		case .saved: "Сохранённое"
-		case .more: "Ещё"
+		case .more: "Аккаунт"
 		}
 	}
 
@@ -17,7 +17,7 @@ nonisolated enum AppTab: Hashable, CaseIterable, Identifiable, Sendable {
 		switch self {
 		case .feed: "play.rectangle"
 		case .saved: "bookmark"
-		case .more: "ellipsis.circle"
+		case .more: "person.crop.circle"
 		}
 	}
 }

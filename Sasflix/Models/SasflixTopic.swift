@@ -1,0 +1,53 @@
+import Foundation
+
+nonisolated struct SasflixTopic: Decodable, Sendable {
+	let id: Int
+	let uuid: String
+	let title: String
+	let publishedAt: Date
+	let cover: SasflixTopicCover?
+	let category: SasflixTopicCategory?
+	let favoriteAt: Date?
+
+	var link: URL? {
+		guard !uuid.isEmpty else {
+			return nil
+		}
+
+		return URL(string: "https://sasflix.ru/\(category?.uri ?? "topics")/\(uuid)")
+	}
+
+	var posterURL: URL? {
+		guard let uuid = cover?.uuid else {
+			return nil
+		}
+
+		return URL(string: "https://sasflix.ru/api/image/\(uuid)?w=800&fit=max")
+	}
+
+	var feedItem: FeedItem? {
+		guard let link else {
+			return nil
+		}
+
+		return FeedItem(title: title, link: link, publishedAt: publishedAt, posterURL: posterURL, author: nil)
+	}
+
+	enum CodingKeys: String, CodingKey {
+		case id, uuid, title, cover, category
+		case publishedAt = "published_at"
+		case favoriteAt = "favorite_at"
+	}
+
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+
+		id = container.decodeFlexibleInt(forKey: .id) ?? 0
+		uuid = container.decodeFlexibleString(forKey: .uuid) ?? ""
+		title = (try? container.decode(String.self, forKey: .title)) ?? ""
+		cover = try? container.decodeIfPresent(SasflixTopicCover.self, forKey: .cover)
+		category = try? container.decodeIfPresent(SasflixTopicCategory.self, forKey: .category)
+		publishedAt = container.decodeFlexibleString(forKey: .publishedAt)?.sasflixDate ?? .distantPast
+		favoriteAt = container.decodeFlexibleString(forKey: .favoriteAt)?.sasflixDate
+	}
+}

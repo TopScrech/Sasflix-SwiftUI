@@ -58,6 +58,36 @@ nonisolated struct AuthenticationService: Sendable {
 		}
 	}
 
+	func loadFavoriteTopics(token: String, offset: Int, limit: Int) async throws -> FavoriteTopicsResponse {
+		let request = try makeRequest(
+			path: "user/favorite/topics",
+			method: "GET",
+			token: token,
+			queryItems: [
+				URLQueryItem(name: "offset", value: String(offset)),
+				URLQueryItem(name: "limit", value: String(limit))
+			]
+		)
+		let data = try await responseData(for: request)
+		return try JSONDecoder().decode(FavoriteTopicsResponse.self, from: data)
+	}
+
+	func loadTopic(uuid: String, token: String? = nil) async throws -> SasflixTopic {
+		let request = try makeRequest(path: "web/topics/\(uuid)", method: "GET", token: token)
+		let data = try await responseData(for: request)
+		return try JSONDecoder().decode(SasflixTopic.self, from: data)
+	}
+
+	func addFavoriteTopic(id: Int, token: String) async throws {
+		let request = try makeRequest(path: "user/favorite/topics/\(id)", method: "PUT", token: token)
+		_ = try await responseData(for: request)
+	}
+
+	func removeFavoriteTopic(id: Int, token: String) async throws {
+		let request = try makeRequest(path: "user/favorite/topics/\(id)", method: "DELETE", token: token)
+		_ = try await responseData(for: request)
+	}
+
 	func signOut(token: String) async throws {
 		let request = try makeRequest(path: "security/logout", method: "POST", token: token)
 		_ = try await responseData(for: request)

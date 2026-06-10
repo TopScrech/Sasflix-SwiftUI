@@ -6,7 +6,7 @@ Native SwiftUI iOS app for `sasflix.ru`
 
 - Loads the public Sasflix RSS feed
 - Shows poster cards, categories, search, and pull-to-refresh
-- Saves feed items locally with `UserDefaults`
+- Syncs saved feed items with Sasflix account favorites through the API
 - Opens playback and account-dependent actions on the official site
 - Uses iOS 18+ `Tab` API and Swift 6 settings
 

@@ -30,6 +30,16 @@ struct ContentView: View {
 		.environment(authenticationStore)
 		.task {
 			await authenticationStore.restoreSession()
+			await bookmarkStore.loadSavedItems()
+		}
+		.onChange(of: authenticationStore.user?.id) { _, userID in
+			Task {
+				if userID == nil {
+					bookmarkStore.clear()
+				} else {
+					await bookmarkStore.loadSavedItems()
+				}
+			}
 		}
 	}
 }

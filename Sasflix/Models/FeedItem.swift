@@ -12,6 +12,11 @@ nonisolated struct FeedItem: Identifiable, Hashable, Codable, Sendable {
 		FeedCategory(url: link)
 	}
 
+	var topicUUID: String? {
+		let uuid = link.lastPathComponent
+		return uuid.isEmpty ? nil : uuid
+	}
+
 	init(title: String, link: URL, publishedAt: Date, posterURL: URL?, author: String?) {
 		self.id = link
 		self.title = title

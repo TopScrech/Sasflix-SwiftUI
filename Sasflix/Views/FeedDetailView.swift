@@ -3,6 +3,7 @@ import SwiftUI
 struct FeedDetailView: View {
 	@Environment(\.openURL) private var openURL
 	@Environment(BookmarkStore.self) private var bookmarkStore
+	@Environment(AuthenticationStore.self) private var authStore
 	let item: FeedItem
 
 	var body: some View {
@@ -43,6 +44,7 @@ struct FeedDetailView: View {
 		.toolbar {
 			ToolbarItem(placement: .topBarTrailing) {
 				Button(bookmarkStore.isSaved(item) ? "Убрать" : "Сохранить", systemImage: bookmarkStore.isSaved(item) ? "bookmark.fill" : "bookmark", action: toggleSaved)
+					.disabled(authStore.user == nil || bookmarkStore.isUpdating(item))
 			}
 		}
 	}
@@ -52,6 +54,8 @@ struct FeedDetailView: View {
 	}
 
 	private func toggleSaved() {
-		bookmarkStore.toggle(item)
+		Task {
+			await bookmarkStore.toggle(item)
+		}
 	}
 }
