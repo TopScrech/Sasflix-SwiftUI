@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SignInView: View {
     @Bindable var authStore: AuthenticationStore
-    @Environment(\.openURL) private var openURL
     
     var body: some View {
         Form {
@@ -23,10 +22,6 @@ struct SignInView: View {
                 Button("Войти", action: signIn)
                     .disabled(!authStore.canSubmit)
             }
-            
-            Section {
-                Button("Открыть sasflix.ru", systemImage: "safari", action: openSite)
-            }
         }
         .navigationTitle("Вход")
         .overlay {
@@ -40,13 +35,5 @@ struct SignInView: View {
         Task {
             await authStore.signIn()
         }
-    }
-    
-    private func openSite() {
-        guard let url = URL(string: "https://sasflix.ru/") else {
-            return
-        }
-        
-        openURL(url)
     }
 }
