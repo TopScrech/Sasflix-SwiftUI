@@ -6,7 +6,7 @@ struct CategoryPickerView: View {
 	var body: some View {
 		ScrollView(.horizontal) {
 			HStack {
-				ForEach(FeedCategory.allCases) { category in
+				ForEach(FeedCategory.allCategories) { category in
 					Button(category.title, systemImage: category.systemImage) {
 						selectedCategory = selectedCategory == category ? .all : category
 					}

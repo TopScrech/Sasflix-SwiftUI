@@ -23,6 +23,15 @@
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		F38761282FDA2C1C00A0340F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				F38761272FDA2C1C00A0340F /* ScrechKit in Frameworks */,
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
 		300000000000000000000001 = {
 			isa = PBXGroup;
@@ -69,15 +78,6 @@
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		F38761282FDA2C1C00A0340F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			files = (
-				F38761272FDA2C1C00A0340F /* ScrechKit in Frameworks */,
-			);
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXProject section */
 		600000000000000000000001 /* Project object */ = {
