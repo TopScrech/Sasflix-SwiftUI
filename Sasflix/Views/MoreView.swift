@@ -21,6 +21,22 @@ struct MoreView: View {
 				}
 			}
 
+			if let user = authStore.user {
+				Section("Подписка") {
+					if let subscription = user.subscription {
+						SubscriptionStatusView(subscription: subscription)
+					} else {
+						LabeledContent("Текущая", value: "Нет активной подписки")
+					}
+
+					NavigationLink {
+						PaymentHistoryView()
+					} label: {
+						Label("История платежей", systemImage: "creditcard")
+					}
+				}
+			}
+
 			Section("Сасфликс") {
 				Button("Открыть сайт", systemImage: "safari", action: openSite)
 				Button("Открыть RSS", systemImage: "dot.radiowaves.left.and.right", action: openRSS)
