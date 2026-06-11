@@ -8,9 +8,11 @@ struct SavedAuthenticatedContentView: View {
             ScrollView {
                 VStack {
                     if bookmarkStore.isLoading {
-                        LoadingStateView(title: "Загружаем закладки")
+                        LoadingStateView("Загружаем закладки")
+                        
                     } else if let errorMessage = bookmarkStore.errorMessage {
                         EmptyStateView(title: "Не удалось загрузить", systemImage: "exclamationmark.triangle", message: errorMessage)
+                        
                     } else {
                         EmptyStateView(title: "Пока пусто", systemImage: "bookmark", message: "Сохраняйте выпуски из ленты")
                     }

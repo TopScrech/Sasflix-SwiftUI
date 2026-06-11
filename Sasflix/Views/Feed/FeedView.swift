@@ -34,9 +34,11 @@ struct FeedView: View {
         }
         .overlay {
             if viewModel.isLoading, viewModel.items.isEmpty {
-                LoadingStateView(title: "Загружаем ленту")
+                LoadingStateView("Загружаем ленту")
+                
             } else if let errorMessage = viewModel.errorMessage, viewModel.items.isEmpty {
                 EmptyStateView(title: "Нет соединения", systemImage: "wifi.exclamationmark", message: errorMessage)
+                
             } else if viewModel.visibleItems.isEmpty, !viewModel.items.isEmpty {
                 EmptyStateView(title: "Ничего не найдено", systemImage: "magnifyingglass", message: "Попробуйте другой запрос или категорию")
             }

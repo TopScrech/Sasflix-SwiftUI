@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct LoadingStateView: View {
-    let title: String
+    private let title: String
+    
+    init(_ title: String) {
+        self.title = title
+    }
     
     var body: some View {
         ContentUnavailableView {

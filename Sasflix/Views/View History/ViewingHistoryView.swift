@@ -16,9 +16,11 @@ struct ViewingHistoryView: View {
                     }
                 }
             } else if authStore.isViewingHistoryLoading && authStore.viewingHistory.isEmpty {
-                LoadingStateView(title: "Загружаем историю просмотра")
+                LoadingStateView("Загружаем историю просмотра")
+                
             } else if let message = authStore.viewingHistoryErrorMessage, authStore.viewingHistory.isEmpty {
                 EmptyStateView(title: "История недоступна", systemImage: "exclamationmark.triangle", message: message)
+                
             } else if authStore.viewingHistory.isEmpty {
                 EmptyStateView(
                     title: "Истории нет",
@@ -32,12 +34,10 @@ struct ViewingHistoryView: View {
                             .foregroundStyle(.red)
                     }
                     
-                    Section("История") {
-                        ForEach(authStore.viewingHistory) { topic in
-                            if let item = topic.feedItem {
-                                NavigationLink(value: item) {
-                                    ViewingHistoryRowView(topic: topic)
-                                }
+                    ForEach(authStore.viewingHistory) { topic in
+                        if let item = topic.feedItem {
+                            NavigationLink(value: item) {
+                                ViewingHistoryRowView(topic: topic)
                             }
                         }
                     }

@@ -6,7 +6,7 @@ struct PaymentHistoryView: View {
     var body: some View {
         Group {
             if authStore.isPaymentHistoryLoading && authStore.paymentHistory.isEmpty {
-                LoadingStateView(title: "Загружаем историю платежей")
+                LoadingStateView("Загружаем историю платежей")
                 
             } else if let message = authStore.paymentHistoryErrorMessage, authStore.paymentHistory.isEmpty {
                 EmptyStateView(title: "История недоступна", systemImage: "exclamationmark.triangle", message: message)
