@@ -18,7 +18,7 @@ struct AccountSettings: View {
                     
                     Button("Выйти", systemImage: "rectangle.portrait.and.arrow.right", action: signOut)
                         .disabled(authStore.isLoading)
-                        .tint(.red)
+                        .foregroundStyle(.red)
                 } else {
                     NavigationLink {
                         SignInView(authStore: authStore)
