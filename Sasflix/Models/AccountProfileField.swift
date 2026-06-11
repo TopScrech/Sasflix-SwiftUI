@@ -7,11 +7,8 @@ nonisolated enum AccountProfileField: Identifiable {
     
     var title: String {
         switch self {
-        case .username:
-            "Логин"
-            
-        case .fullname:
-            "Псевдоним"
+        case .username: "Логин"
+        case .fullname: "Псевдоним"
         }
     }
 }
