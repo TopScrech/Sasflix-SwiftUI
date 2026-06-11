@@ -3,6 +3,9 @@ import ScrechKit
 struct AccountSettings: View {
     @Environment(\.openURL) private var openURL
     @Environment(AuthenticationStore.self) private var authStore
+    @State private var editedProfileField: AccountProfileField?
+    @State private var isProfileEditorPresented = false
+    @State private var profileDraft = ""
     
     var body: some View {
         List {
@@ -25,6 +28,29 @@ struct AccountSettings: View {
                     } label: {
                         Label("Войти", systemImage: "person.crop.circle")
                     }
+                }
+            }
+            
+            if authStore.user != nil {
+                Section("Логин") {
+                    Button(action: editUsername) {
+                        LabeledContent(authStore.user?.username ?? "-", value: "Изменить")
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(authStore.isProfileUpdating)
+                }
+                
+                Section("Псевдоним") {
+                    Button(action: editFullname) {
+                        LabeledContent(authStore.user?.fullname ?? "-", value: "Изменить")
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(authStore.isProfileUpdating)
+                }
+                
+                if let errorMessage = authStore.profileErrorMessage {
+                    Text(errorMessage)
+                        .foregroundStyle(.red)
                 }
             }
 #if DEBUG
@@ -51,8 +77,19 @@ struct AccountSettings: View {
             }
         }
         .navigationTitle("Аккаунт")
+        .overlay {
+            if authStore.isProfileUpdating {
+                ProgressView()
+            }
+        }
         .refreshable {
             await authStore.refreshAccount()
+        }
+        .alert(editedProfileField?.title ?? "", isPresented: $isProfileEditorPresented) {
+            AccountProfileTextField(field: editedProfileField, text: $profileDraft)
+            
+            Button("Сохранить", action: updateProfile)
+            Button("Отменить", role: .cancel, action: clearProfileEditor)
         }
         .toolbar {
             NavigationLink {
@@ -81,6 +118,43 @@ struct AccountSettings: View {
     private func signOut() {
         Task {
             await authStore.signOut()
+        }
+    }
+    
+    private func editUsername() {
+        editedProfileField = .username
+        profileDraft = authStore.user?.username ?? ""
+        isProfileEditorPresented = true
+    }
+    
+    private func editFullname() {
+        editedProfileField = .fullname
+        profileDraft = authStore.user?.fullname ?? ""
+        isProfileEditorPresented = true
+    }
+    
+    private func clearProfileEditor() {
+        isProfileEditorPresented = false
+        editedProfileField = nil
+        profileDraft = ""
+    }
+    
+    private func updateProfile() {
+        let field = editedProfileField
+        let draft = profileDraft
+        clearProfileEditor()
+        
+        Task {
+            switch field {
+            case .username:
+                await authStore.updateProfile(username: draft)
+                
+            case .fullname:
+                await authStore.updateProfile(fullname: draft)
+                
+            case nil:
+                break
+            }
         }
     }
 }
