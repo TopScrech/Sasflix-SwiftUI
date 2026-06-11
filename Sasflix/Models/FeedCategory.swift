@@ -60,7 +60,7 @@ nonisolated enum FeedCategory: String, CaseIterable, Identifiable, Codable, Send
 #if DEBUG
         FeedCategory.allCases
 #else
-        [.all, .topics, .commentator, .trainings, .critic, .documentary, .review, .algoritm]
+        [.all, .topics, .commentator, .critic, .documentary, .review, .algoritm]
 #endif
     }
 }
