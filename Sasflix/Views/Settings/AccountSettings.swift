@@ -31,10 +31,10 @@ struct AccountSettings: View {
                 }
             }
             
-            if authStore.user != nil {
+            if let user = authStore.user {
                 Section("Логин") {
                     Button(action: editUsername) {
-                        LabeledContent(authStore.user?.username ?? "-", value: "Изменить")
+                        LabeledContent(user.username ?? "-", value: "Изменить")
                     }
                     .buttonStyle(.plain)
                     .disabled(authStore.isProfileUpdating)
@@ -42,11 +42,27 @@ struct AccountSettings: View {
                 
                 Section("Псевдоним") {
                     Button(action: editFullname) {
-                        LabeledContent(authStore.user?.fullname ?? "-", value: "Изменить")
+                        LabeledContent(user.fullname ?? "-", value: "Изменить")
                     }
                     .buttonStyle(.plain)
                     .disabled(authStore.isProfileUpdating)
                 }
+                
+                Section("E-mail для уведомлений") {
+                    Button(action: editEmail) {
+                        LabeledContent(user.email ?? "-", value: "Изменить")
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(authStore.isProfileUpdating)
+                }
+                
+                AccountNotificationSettingsView(
+                    user: user,
+                    isUpdating: authStore.isProfileUpdating,
+                    updateNotificationSettings: {
+                        updateNotificationSettings(notifyEmail: $0, notifyWeb: $1, notifyApp: $2)
+                    }
+                )
                 
                 if let errorMessage = authStore.profileErrorMessage {
                     Text(errorMessage)
@@ -133,6 +149,12 @@ struct AccountSettings: View {
         isProfileEditorPresented = true
     }
     
+    private func editEmail() {
+        editedProfileField = .email
+        profileDraft = authStore.user?.email ?? ""
+        isProfileEditorPresented = true
+    }
+    
     private func clearProfileEditor() {
         isProfileEditorPresented = false
         editedProfileField = nil
@@ -152,9 +174,22 @@ struct AccountSettings: View {
             case .fullname:
                 await authStore.updateProfile(fullname: draft)
                 
+            case .email:
+                await authStore.updateProfile(email: draft)
+                
             case nil:
                 break
             }
+        }
+    }
+    
+    private func updateNotificationSettings(notifyEmail: Bool, notifyWeb: Bool, notifyApp: Bool) {
+        Task {
+            await authStore.updateProfile(
+                notifyEmail: notifyEmail,
+                notifyWeb: notifyWeb,
+                notifyApp: notifyApp
+            )
         }
     }
 }
