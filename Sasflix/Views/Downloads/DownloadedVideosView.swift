@@ -27,9 +27,6 @@ struct DownloadedVideosView: View {
             Button("Удалить все", role: .destructive, action: deleteAllDownloads)
             Button("Отмена", role: .cancel) {}
         }
-        .navigationDestination(for: DownloadedVideo.self) {
-            DownloadedVideoView(download: $0)
-        }
     }
     
     private func showDeleteAllConfirmation() {

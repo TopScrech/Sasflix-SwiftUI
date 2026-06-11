@@ -19,7 +19,9 @@ struct DownloadedVideosGridView: View {
                 spacing: VideoGridLayout.spacing
             ) {
                 ForEach(downloads) { download in
-                    NavigationLink(value: download) {
+                    NavigationLink {
+                        DownloadedVideoView(download: download)
+                    } label: {
                         DownloadedVideoRowView(download: download)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
