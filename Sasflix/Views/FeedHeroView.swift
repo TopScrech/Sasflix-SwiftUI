@@ -6,8 +6,7 @@ struct FeedHeroView: View {
     var body: some View {
         VStack(alignment: .leading) {
             RemotePosterView(url: item.posterURL)
-            
-            MetadataBadgeView(title: item.category.title, systemImage: item.category.systemImage)
+            MetadataBadgeView(category: item.category)
             
             Text(item.title)
                 .title2(.bold)

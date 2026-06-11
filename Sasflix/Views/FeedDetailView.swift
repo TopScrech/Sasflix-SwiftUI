@@ -10,8 +10,7 @@ struct FeedDetailView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 TopicPlaybackSectionView(item: item)
-                
-                MetadataBadgeView(title: item.category.title, systemImage: item.category.systemImage)
+                MetadataBadgeView(category: item.category)
                 
                 Text(item.title)
                     .title(.bold)

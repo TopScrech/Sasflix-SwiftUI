@@ -8,7 +8,7 @@ struct FeedItemRowView: View {
             RemotePosterView(url: item.posterURL)
             
             HStack {
-                MetadataBadgeView(title: item.category.title, systemImage: item.category.systemImage)
+                MetadataBadgeView(category: item.category)
                 
                 Spacer()
                 
