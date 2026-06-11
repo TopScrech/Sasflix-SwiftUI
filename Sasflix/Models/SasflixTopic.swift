@@ -34,7 +34,14 @@ nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
             return nil
         }
         
-        return FeedItem(title: title, link: link, publishedAt: publishedAt, posterURL: posterURL, author: nil)
+        return FeedItem(
+            title: title,
+            link: link,
+            publishedAt: publishedAt,
+            posterURL: posterURL,
+            author: nil,
+            requiresSubscription: hasVideo && !access
+        )
     }
     
     enum CodingKeys: String, CodingKey {

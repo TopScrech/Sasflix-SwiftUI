@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct ViewingHistoryView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(AuthenticationStore.self) private var authStore
+    @State private var contentWidth: CGFloat = 0
     
     var body: some View {
         Group {
@@ -28,22 +31,35 @@ struct ViewingHistoryView: View {
                     message: "Просмотренные видео появятся здесь"
                 )
             } else {
-                List {
-                    if let message = authStore.viewingHistoryErrorMessage {
-                        Text(message)
-                            .foregroundStyle(.red)
-                    }
-                    
-                    ForEach(authStore.viewingHistory) { topic in
-                        if let item = topic.feedItem {
-                            NavigationLink(value: item) {
-                                ViewingHistoryRowView(topic: topic)
+                ScrollView {
+                    LazyVStack(alignment: .leading) {
+                        if let message = authStore.viewingHistoryErrorMessage {
+                            Text(message)
+                                .foregroundStyle(.red)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        LazyVGrid(
+                            columns: VideoGridLayout.columns(
+                                contentWidth: contentWidth,
+                                horizontalSizeClass: horizontalSizeClass,
+                                verticalSizeClass: verticalSizeClass
+                            ),
+                            alignment: .leading,
+                            spacing: VideoGridLayout.spacing
+                        ) {
+                            ForEach(authStore.viewingHistory) { topic in
+                                if let item = topic.feedItem {
+                                    NavigationLink(value: item) {
+                                        ViewingHistoryRowView(topic: topic)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
-                    }
-                    
-                    if authStore.isViewingHistoryLoading || authStore.canLoadMoreViewingHistory {
-                        Section {
+                        
+                        if authStore.isViewingHistoryLoading || authStore.canLoadMoreViewingHistory {
                             if authStore.isViewingHistoryLoading {
                                 HStack {
                                     Spacer()
@@ -54,6 +70,12 @@ struct ViewingHistoryView: View {
                                 Button("Загрузить ещё", systemImage: "arrow.down.circle", action: loadMore)
                             }
                         }
+                    }
+                    .padding()
+                    .onGeometryChange(for: CGFloat.self) {
+                        $0.size.width
+                    } action: {
+                        contentWidth = $0
                     }
                 }
                 .refreshable {

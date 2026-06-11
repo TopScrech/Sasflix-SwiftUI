@@ -10,9 +10,11 @@ final class AuthenticationStore {
     var viewingHistory: [SasflixTopic] = []
     var viewingHistoryTotal = 0
     var isLoading = false
+    var isProfileUpdating = false
     var isPaymentHistoryLoading = false
     var isViewingHistoryLoading = false
     var errorMessage: String?
+    var profileErrorMessage: String?
     var paymentHistoryErrorMessage: String?
     var viewingHistoryErrorMessage: String?
     
@@ -24,7 +26,7 @@ final class AuthenticationStore {
     var canSubmit: Bool {
         !trimmedUsername.isEmpty && !password.isEmpty && !isLoading
     }
-    
+
     var canLoadMoreViewingHistory: Bool {
         !isViewingHistoryLoading && viewingHistory.count < viewingHistoryTotal
     }
@@ -77,6 +79,64 @@ final class AuthenticationStore {
             errorMessage = error.localizedDescription
         } catch {
             errorMessage = "Не удалось войти"
+        }
+    }
+    
+    func refreshAccount() async {
+        guard let token else {
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        
+        do {
+            user = try await service.loadProfile(token: token)
+            username = user?.username ?? username
+            await loadPaymentHistory()
+        } catch AuthenticationRequestError.unauthorized {
+            clearSession()
+        } catch {
+            errorMessage = "Не удалось обновить аккаунт"
+        }
+    }
+
+    func updateProfile(username profileUsername: String? = nil, fullname profileFullname: String? = nil) async {
+        guard let token, let user, !isProfileUpdating else {
+            return
+        }
+        
+        let updatedUsername = (profileUsername ?? user.username ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let updatedFullname = (profileFullname ?? user.fullname ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !updatedUsername.isEmpty, !updatedFullname.isEmpty else {
+            profileErrorMessage = "Заполните профиль"
+            return
+        }
+        
+        guard updatedUsername != (user.username ?? "") || updatedFullname != (user.fullname ?? "") else {
+            return
+        }
+        
+        isProfileUpdating = true
+        profileErrorMessage = nil
+        defer { isProfileUpdating = false }
+        
+        let request = UserProfileUpdateRequest(
+            id: user.id,
+            username: updatedUsername,
+            fullname: updatedFullname,
+            email: user.email
+        )
+        
+        do {
+            self.user = try await service.updateProfile(request: request, token: token)
+            username = self.user?.username ?? username
+        } catch AuthenticationRequestError.unauthorized {
+            clearSession()
+        } catch {
+            profileErrorMessage = "Не удалось сохранить профиль"
         }
     }
     
@@ -182,7 +242,7 @@ final class AuthenticationStore {
     private var trimmedUsername: String {
         username.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     private func clearSession() {
         token = nil
         tokenStore.deleteToken()
@@ -192,6 +252,7 @@ final class AuthenticationStore {
         viewingHistoryTotal = 0
         password = ""
         errorMessage = nil
+        profileErrorMessage = nil
         paymentHistoryErrorMessage = nil
         viewingHistoryErrorMessage = nil
     }

@@ -30,6 +30,12 @@ nonisolated struct AuthenticationService: Sendable {
         return try JSONDecoder().decode(UserProfileResponse.self, from: data).user
     }
     
+    func updateProfile(request profile: UserProfileUpdateRequest, token: String) async throws -> AuthenticatedUser {
+        let request = try makeRequest(path: "user/profile", method: "PATCH", body: profile, token: token)
+        let data = try await responseData(for: request)
+        return try JSONDecoder().decode(UserProfileResponse.self, from: data).user
+    }
+    
     func loadPaymentHistory(token: String) async throws -> PaymentHistoryResponse {
         let request = try makeRequest(
             path: "user/payments",
@@ -90,6 +96,21 @@ nonisolated struct AuthenticationService: Sendable {
         let request = try makeRequest(path: "web/topics/\(uuid)", method: "GET", token: token)
         let data = try await responseData(for: request)
         return try JSONDecoder().decode(SasflixTopic.self, from: data)
+    }
+    
+    func loadBlogPosts(token: String, offset: Int, limit: Int) async throws -> BlogPostsResponse {
+        let request = try makeRequest(
+            path: "web/blog/posts",
+            method: "GET",
+            token: token,
+            queryItems: [
+                URLQueryItem(name: "active", value: "1"),
+                URLQueryItem(name: "offset", value: String(offset)),
+                URLQueryItem(name: "limit", value: String(limit))
+            ]
+        )
+        let data = try await responseData(for: request)
+        return try JSONDecoder().decode(BlogPostsResponse.self, from: data)
     }
     
     func addFavoriteTopic(id: Int, token: String) async throws {

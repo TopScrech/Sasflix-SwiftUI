@@ -1,16 +1,16 @@
 import SwiftUI
 
 struct VideoView: View {
-    @Environment(\.openURL) private var openURL
     @Environment(BookmarkStore.self) private var bookmarkStore
     @Environment(AuthenticationStore.self) private var authStore
+    @State private var playbackVM = TopicPlaybackVM()
     
     let item: FeedItem
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                TopicPlaybackSectionView(item: item)
+                TopicPlaybackSectionView(item: item, vm: playbackVM)
                 MetadataBadgeView(category: item.category)
                 
                 Text(item.title)
@@ -26,9 +26,13 @@ struct VideoView: View {
                     .subheadline()
                     .secondary()
                 
-                Button("Открыть на сайте", systemImage: "safari", action: openOfficialPage)
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
+                if let video = playbackVM.video {
+                    VideoDownloadControlView(
+                        item: item,
+                        video: video,
+                        authorizationHeader: playbackVM.authorizationHeader
+                    )
+                }
             }
             .padding()
         }
@@ -41,10 +45,6 @@ struct VideoView: View {
                     .disabled(authStore.user == nil || bookmarkStore.isUpdating(item))
             }
         }
-    }
-    
-    private func openOfficialPage() {
-        openURL(item.link)
     }
     
     private func toggleSaved() {

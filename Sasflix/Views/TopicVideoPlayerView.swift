@@ -6,12 +6,14 @@ struct TopicVideoPlayerView: View {
     let video: SasflixVideo
     let fallbackPosterURL: URL?
     let authorizationHeader: String?
+    let localFileURL: URL?
     @State private var player: AVPlayer?
+    @State private var isPresentingFullScreen = false
     
     var body: some View {
         ZStack {
             if let player {
-                VideoPlayer(player: player)
+                TopicVideoPlayerControllerView(player: player, isPresentingFullScreen: $isPresentingFullScreen)
             } else {
                 RemotePosterView(url: video.posterURL ?? fallbackPosterURL)
                 
@@ -28,22 +30,23 @@ struct TopicVideoPlayerView: View {
         }
         .aspectRatio(16 / 9, contentMode: .fit)
         .clipShape(.rect(cornerRadius: 8))
-        .onDisappear(perform: pausePlayback)
         .onChange(of: video.id) { _, _ in
             resetPlayback()
         }
     }
     
     private func startPlayback() {
-        guard let streamURL = video.streamURL else {
+        guard let playbackURL else {
             return
         }
         
-        let asset = AVURLAsset(url: streamURL, options: assetOptions)
+        configureAudioSession()
+        
+        let asset = AVURLAsset(url: playbackURL, options: assetOptions)
         let item = AVPlayerItem(asset: asset)
         let player = AVPlayer(playerItem: item)
         
-        if let time = video.time, time > 0 {
+        if localFileURL == nil, let time = video.time, time > 0 {
             player.seek(to: CMTime(seconds: time, preferredTimescale: 600))
         }
         
@@ -58,10 +61,20 @@ struct TopicVideoPlayerView: View {
     private func resetPlayback() {
         player?.pause()
         player = nil
+        isPresentingFullScreen = false
+    }
+    
+    private func configureAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            assertionFailure("Failed to configure video audio session: \(error.localizedDescription)")
+        }
     }
     
     private var assetOptions: [String: Any]? {
-        guard let authorizationHeader else {
+        guard localFileURL == nil, let authorizationHeader else {
             return nil
         }
         
@@ -70,5 +83,9 @@ struct TopicVideoPlayerView: View {
                 "Authorization": authorizationHeader
             ]
         ]
+    }
+    
+    private var playbackURL: URL? {
+        localFileURL ?? video.streamURL
     }
 }
