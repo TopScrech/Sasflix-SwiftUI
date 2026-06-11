@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FeedView: View {
-	@Bindable var viewModel: FeedViewModel
+	@Bindable var viewModel: FeedVM
 
 	var body: some View {
 		ScrollView {

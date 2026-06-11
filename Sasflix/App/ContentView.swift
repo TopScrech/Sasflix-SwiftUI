@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
 	@State private var selectedTab: AppTab = .feed
-	@State private var feedViewModel = FeedViewModel()
+	@State private var feedViewModel = FeedVM()
 	@State private var bookmarkStore = BookmarkStore()
 	@State private var authenticationStore = AuthenticationStore()
 

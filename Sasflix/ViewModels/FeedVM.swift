@@ -1,8 +1,7 @@
 import Foundation
-import Observation
 
 @Observable
-final class FeedViewModel {
+final class FeedVM {
 	private let feedService: RSSFeedService
 	var items: [FeedItem] = []
 	var selectedCategory: FeedCategory = .all
