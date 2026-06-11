@@ -3,13 +3,14 @@ import SwiftUI
 struct VideoView: View {
     @Environment(BookmarkStore.self) private var bookmarkStore
     @Environment(AuthenticationStore.self) private var authStore
+    @State private var playbackVM = TopicPlaybackVM()
     
     let item: FeedItem
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                TopicPlaybackSectionView(item: item)
+                TopicPlaybackSectionView(item: item, vm: playbackVM)
                 MetadataBadgeView(category: item.category)
                 
                 Text(item.title)
@@ -24,6 +25,14 @@ struct VideoView: View {
                 Text(item.publishedAt, format: .dateTime.day().month(.wide).year().hour().minute())
                     .subheadline()
                     .secondary()
+                
+                if let video = playbackVM.video {
+                    VideoDownloadControlView(
+                        item: item,
+                        video: video,
+                        authorizationHeader: playbackVM.authorizationHeader
+                    )
+                }
             }
             .padding()
         }
