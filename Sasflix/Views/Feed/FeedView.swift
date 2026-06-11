@@ -17,6 +17,9 @@ struct FeedView: View {
                         FeedHeroView(item: featuredItem)
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        FeedItemContextMenuView(item: featuredItem)
+                    }
                 }
                 
                 LazyVGrid(
@@ -34,6 +37,9 @@ struct FeedView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(.plain)
+                        .contextMenu {
+                            FeedItemContextMenuView(item: item)
+                        }
                     }
                 }
             }
@@ -46,7 +52,7 @@ struct FeedView: View {
         }
         .navigationTitle("Сасфликс")
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarLeading) {
                 NavigationLink {
                     TopUsersView()
                 } label: {
@@ -54,7 +60,9 @@ struct FeedView: View {
                         .frame(32)
                 }
                 .accessibilityLabel("Топ пользователей")
-                
+            }
+            
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 NavigationLink {
                     DownloadedVideosView()
                 } label: {

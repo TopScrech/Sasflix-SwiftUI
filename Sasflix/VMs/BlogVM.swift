@@ -38,6 +38,7 @@ final class BlogVM {
     func reset() {
         posts = []
         total = 0
+        searchText = ""
         errorMessage = nil
         isLoading = false
         isLoadingMore = false

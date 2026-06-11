@@ -55,6 +55,9 @@ struct ViewingHistoryView: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                     }
                                     .buttonStyle(.plain)
+                                    .contextMenu {
+                                        FeedItemContextMenuView(item: item)
+                                    }
                                 }
                             }
                         }

@@ -102,20 +102,36 @@ final class AuthenticationStore {
         }
     }
 
-    func updateProfile(username profileUsername: String? = nil, fullname profileFullname: String? = nil) async {
+    func updateProfile(
+        username profileUsername: String? = nil,
+        fullname profileFullname: String? = nil,
+        email profileEmail: String? = nil,
+        notifyEmail profileNotifyEmail: Bool? = nil,
+        notifyWeb profileNotifyWeb: Bool? = nil,
+        notifyApp profileNotifyApp: Bool? = nil
+    ) async {
         guard let token, let user, !isProfileUpdating else {
             return
         }
         
         let updatedUsername = (profileUsername ?? user.username ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let updatedFullname = (profileFullname ?? user.fullname ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let updatedEmail = (profileEmail ?? user.email ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let updatedNotifyEmail = profileNotifyEmail ?? user.notifyEmail
+        let updatedNotifyWeb = profileNotifyWeb ?? user.notifyWeb
+        let updatedNotifyApp = profileNotifyApp ?? user.notifyApp
         
-        guard !updatedUsername.isEmpty, !updatedFullname.isEmpty else {
+        guard !updatedUsername.isEmpty, !updatedFullname.isEmpty, !updatedEmail.isEmpty else {
             profileErrorMessage = "Заполните профиль"
             return
         }
         
-        guard updatedUsername != (user.username ?? "") || updatedFullname != (user.fullname ?? "") else {
+        guard updatedUsername != (user.username ?? "")
+            || updatedFullname != (user.fullname ?? "")
+            || updatedEmail != (user.email ?? "")
+            || updatedNotifyEmail != user.notifyEmail
+            || updatedNotifyWeb != user.notifyWeb
+            || updatedNotifyApp != user.notifyApp else {
             return
         }
         
@@ -127,7 +143,10 @@ final class AuthenticationStore {
             id: user.id,
             username: updatedUsername,
             fullname: updatedFullname,
-            email: user.email
+            email: updatedEmail,
+            notifyEmail: updatedNotifyEmail,
+            notifyWeb: updatedNotifyWeb,
+            notifyApp: updatedNotifyApp
         )
         
         do {

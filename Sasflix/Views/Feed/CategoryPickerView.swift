@@ -15,7 +15,7 @@ struct CategoryPickerView: View {
                     .tint(selectedCategory == category ? .red : .gray)
                 }
             }
-            .padding(.vertical)
+            .padding(.bottom)
         }
         .scrollIndicators(.hidden)
     }

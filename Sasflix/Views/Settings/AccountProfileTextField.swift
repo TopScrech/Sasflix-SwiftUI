@@ -16,6 +16,13 @@ struct AccountProfileTextField: View {
             TextField("Псевдоним", text: $text)
                 .textContentType(.nickname)
             
+        case .email:
+            TextField("E-mail для уведомлений", text: $text)
+                .textContentType(.emailAddress)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.emailAddress)
+            
         case nil:
             EmptyView()
         }

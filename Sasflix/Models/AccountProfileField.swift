@@ -1,5 +1,5 @@
 nonisolated enum AccountProfileField: Identifiable {
-    case username, fullname
+    case username, fullname, email
     
     var id: Self {
         self
@@ -9,6 +9,7 @@ nonisolated enum AccountProfileField: Identifiable {
         switch self {
         case .username: "Логин"
         case .fullname: "Псевдоним"
+        case .email: "E-mail для уведомлений"
         }
     }
 }
