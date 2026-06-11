@@ -37,8 +37,6 @@ struct VideoDownloadControlView: View {
                     .foregroundStyle(.red)
             }
         }
-        .padding()
-        .background(.thinMaterial, in: .rect(cornerRadius: 8))
         .monospacedDigit()
     }
     
