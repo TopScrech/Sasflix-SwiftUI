@@ -51,6 +51,9 @@ struct AccountSettings: View {
             }
         }
         .navigationTitle("Аккаунт")
+        .refreshable {
+            await authStore.refreshAccount()
+        }
         .toolbar {
             NavigationLink {
                 DebugSettings()

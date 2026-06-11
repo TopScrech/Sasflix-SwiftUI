@@ -80,6 +80,26 @@ final class AuthenticationStore {
         }
     }
     
+    func refreshAccount() async {
+        guard let token else {
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        
+        do {
+            user = try await service.loadProfile(token: token)
+            username = user?.username ?? username
+            await loadPaymentHistory()
+        } catch AuthenticationRequestError.unauthorized {
+            clearSession()
+        } catch {
+            errorMessage = "Не удалось обновить аккаунт"
+        }
+    }
+    
     func loadPaymentHistory() async {
         guard let token else {
             paymentHistory = []
