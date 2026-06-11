@@ -15,9 +15,15 @@ struct TopicVideoPlayerView: View {
             } else {
                 RemotePosterView(url: video.posterURL ?? fallbackPosterURL)
                 
-                Button("Смотреть", systemImage: "play.fill", action: startPlayback)
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
+                if #available(iOS 26, *) {
+                    Button("Смотреть", systemImage: "play.fill", action: startPlayback)
+                        .buttonStyle(.glassProminent)
+                        .controlSize(.large)
+                } else {
+                    Button("Смотреть", systemImage: "play.fill", action: startPlayback)
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                }
             }
         }
         .aspectRatio(16 / 9, contentMode: .fit)
