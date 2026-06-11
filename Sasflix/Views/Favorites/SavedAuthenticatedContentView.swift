@@ -31,7 +31,7 @@ struct SavedAuthenticatedContentView: View {
                 
                 ForEach(bookmarkStore.sortedSavedItems) { item in
                     NavigationLink(value: item) {
-                        FeedItemRowView(item: item)
+                        FeedItemRowView(item)
                     }
                 }
                 .onDelete(perform: removeSavedItems)

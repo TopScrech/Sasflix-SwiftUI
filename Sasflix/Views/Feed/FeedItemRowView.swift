@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct FeedItemRowView: View {
-    let item: FeedItem
+    private let item: FeedItem
+    
+    init(_ item: FeedItem) {
+        self.item = item
+    }
     
     var body: some View {
         VStack(alignment: .leading) {

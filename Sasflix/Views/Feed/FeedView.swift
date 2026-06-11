@@ -17,7 +17,7 @@ struct FeedView: View {
                 
                 ForEach(vm.listItems) { item in
                     NavigationLink(value: item) {
-                        FeedItemRowView(item: item)
+                        FeedItemRowView(item)
                     }
                     .buttonStyle(.plain)
                 }

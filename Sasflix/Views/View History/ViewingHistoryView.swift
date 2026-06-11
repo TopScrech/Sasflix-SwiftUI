@@ -28,22 +28,25 @@ struct ViewingHistoryView: View {
                     message: "Просмотренные видео появятся здесь"
                 )
             } else {
-                List {
-                    if let message = authStore.viewingHistoryErrorMessage {
-                        Text(message)
-                            .foregroundStyle(.red)
-                    }
-                    
-                    ForEach(authStore.viewingHistory) { topic in
-                        if let item = topic.feedItem {
-                            NavigationLink(value: item) {
-                                ViewingHistoryRowView(topic: topic)
+                ScrollView {
+                    LazyVStack(alignment: .leading) {
+                        if let message = authStore.viewingHistoryErrorMessage {
+                            Text(message)
+                                .foregroundStyle(.red)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        ForEach(authStore.viewingHistory) { topic in
+                            if let item = topic.feedItem {
+                                NavigationLink(value: item) {
+                                    ViewingHistoryRowView(topic: topic)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
-                    }
-                    
-                    if authStore.isViewingHistoryLoading || authStore.canLoadMoreViewingHistory {
-                        Section {
+                        
+                        if authStore.isViewingHistoryLoading || authStore.canLoadMoreViewingHistory {
                             if authStore.isViewingHistoryLoading {
                                 HStack {
                                     Spacer()
@@ -55,6 +58,7 @@ struct ViewingHistoryView: View {
                             }
                         }
                     }
+                    .padding()
                 }
                 .refreshable {
                     await authStore.loadViewingHistory()

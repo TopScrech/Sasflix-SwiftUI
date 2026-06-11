@@ -1,4 +1,4 @@
-import SwiftUI
+import ScrechKit
 
 struct PaymentHistoryView: View {
     @Environment(AuthenticationStore.self) private var authStore
@@ -26,10 +26,7 @@ struct PaymentHistoryView: View {
             }
         }
         .navigationTitle("Платежи")
-        .task {
-            await authStore.loadPaymentHistory()
-        }
-        .refreshable {
+        .refreshableTask {
             await authStore.loadPaymentHistory()
         }
     }
