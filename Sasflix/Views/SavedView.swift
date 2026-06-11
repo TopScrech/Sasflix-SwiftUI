@@ -20,7 +20,7 @@ struct SavedView: View {
                 SavedAuthenticatedContentView(bookmarkStore: bookmarkStore)
             }
         }
-        .navigationTitle("Сохранённое")
+        .navigationTitle("Закладки")
         .navigationDestination(for: FeedItem.self) {
             FeedDetailView(item: $0)
         }

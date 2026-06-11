@@ -8,7 +8,7 @@ nonisolated enum AppTab: Hashable, CaseIterable, Identifiable, Sendable {
     var title: LocalizedStringKey {
         switch self {
         case .feed: "Лента"
-        case .saved: "Сохранённое"
+        case .saved: "Закладки"
         case .more: "Аккаунт"
         }
     }
