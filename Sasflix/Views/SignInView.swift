@@ -45,7 +45,7 @@ struct SignInView: View {
     private func signIn() {
         Task {
             await authStore.signIn()
-
+            
             if authStore.user != nil {
                 dismiss()
             }
