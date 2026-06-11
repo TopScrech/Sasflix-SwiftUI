@@ -2,7 +2,9 @@ import SwiftUI
 
 struct SignInView: View {
     @AppStorage("loginUsername") private var username = ""
+    
     @Environment(\.dismiss) private var dismiss
+    
     @Bindable var authStore: AuthenticationStore
     
     var body: some View {
