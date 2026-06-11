@@ -21,7 +21,7 @@ struct SavedAuthenticatedContentView: View {
 				await bookmarkStore.loadSavedItems()
 			}
 		} else {
-			List {
+            ScrollView {
 				if let errorMessage = bookmarkStore.errorMessage {
 					Text(errorMessage)
 						.foregroundStyle(.red)
