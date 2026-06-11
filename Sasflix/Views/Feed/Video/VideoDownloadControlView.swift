@@ -39,6 +39,7 @@ struct VideoDownloadControlView: View {
         }
         .padding()
         .background(.thinMaterial, in: .rect(cornerRadius: 8))
+        .monospacedDigit()
     }
     
     private func startDownload() {
