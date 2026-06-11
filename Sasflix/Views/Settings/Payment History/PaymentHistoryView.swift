@@ -7,8 +7,10 @@ struct PaymentHistoryView: View {
         Group {
             if authStore.isPaymentHistoryLoading && authStore.paymentHistory.isEmpty {
                 LoadingStateView(title: "Загружаем историю платежей")
+                
             } else if let message = authStore.paymentHistoryErrorMessage, authStore.paymentHistory.isEmpty {
                 EmptyStateView(title: "История недоступна", systemImage: "exclamationmark.triangle", message: message)
+                
             } else if authStore.paymentHistory.isEmpty {
                 EmptyStateView(
                     title: "Платежей нет",
@@ -17,10 +19,8 @@ struct PaymentHistoryView: View {
                 )
             } else {
                 List {
-                    Section("История") {
-                        ForEach(authStore.paymentHistory) {
-                            PaymentHistoryRowView(payment: $0)
-                        }
+                    ForEach(authStore.paymentHistory) {
+                        PaymentHistoryRowView(payment: $0)
                     }
                 }
             }
