@@ -1,9 +1,9 @@
-import Foundation
+import SwiftUI
 
 nonisolated enum AuthenticationRequestError: Error, LocalizedError, Sendable {
     case invalidCredentials, unauthorized, server, missingToken, invalidResponse
     
-    var errorDescription: String? {
+    var errorDescription: LocalizedStringKey? {
         switch self {
         case .invalidCredentials:
             "Неверный логин или пароль"
