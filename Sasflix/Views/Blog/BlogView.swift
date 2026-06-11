@@ -18,6 +18,7 @@ struct BlogView: View {
         .searchable(text: $vm.searchText, prompt: "Поиск")
         .onChange(of: authStore.user?.id) { _, _ in
             vm.reset()
+            
             Task {
                 await vm.loadIfNeeded(canAccessBlog: authStore.user?.canReadBlog == true)
             }
@@ -30,10 +31,8 @@ struct BlogView: View {
         } description: {
             Text("Блог доступен подписчикам Сасфликса")
         } actions: {
-            NavigationLink {
+            NavigationLink("Войти") {
                 SignInView(authStore: authStore)
-            } label: {
-                Label("Войти", systemImage: "person.crop.circle")
             }
             .buttonStyle(.borderedProminent)
         }
