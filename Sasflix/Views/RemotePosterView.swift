@@ -17,14 +17,17 @@ struct RemotePosterView: View {
                     switch phase {
                     case .empty:
                         ProgressView()
+                        
                     case .success(let image):
                         image
                             .resizable()
                             .scaledToFill()
+                    
                     case .failure:
                         Image(systemName: "exclamationmark.triangle")
                             .largeTitle()
                             .secondary()
+                        
                     @unknown default:
                         Image(systemName: "play.rectangle")
                             .largeTitle()
