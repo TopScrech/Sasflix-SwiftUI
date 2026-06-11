@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct FeedView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @State private var contentWidth: CGFloat = 0
     @Bindable var vm: FeedVM
     
     var body: some View {
@@ -15,14 +18,30 @@ struct FeedView: View {
                     .buttonStyle(.plain)
                 }
                 
-                ForEach(vm.listItems) { item in
-                    NavigationLink(value: item) {
-                        FeedItemRowView(item)
+                LazyVGrid(
+                    columns: VideoGridLayout.columns(
+                        contentWidth: contentWidth,
+                        horizontalSizeClass: horizontalSizeClass,
+                        verticalSizeClass: verticalSizeClass
+                    ),
+                    alignment: .leading,
+                    spacing: VideoGridLayout.spacing
+                ) {
+                    ForEach(vm.listItems) { item in
+                        NavigationLink(value: item) {
+                            FeedItemRowView(item)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
             }
             .padding()
+            .onGeometryChange(for: CGFloat.self) {
+                $0.size.width
+            } action: {
+                contentWidth = $0
+            }
         }
         .navigationTitle("Сасфликс")
         .toolbar {

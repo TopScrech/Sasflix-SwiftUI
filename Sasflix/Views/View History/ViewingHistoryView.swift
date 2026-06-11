@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct ViewingHistoryView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(AuthenticationStore.self) private var authStore
+    @State private var contentWidth: CGFloat = 0
     
     var body: some View {
         Group {
@@ -36,13 +39,23 @@ struct ViewingHistoryView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        ForEach(authStore.viewingHistory) { topic in
-                            if let item = topic.feedItem {
-                                NavigationLink(value: item) {
-                                    ViewingHistoryRowView(topic: topic)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                        LazyVGrid(
+                            columns: VideoGridLayout.columns(
+                                contentWidth: contentWidth,
+                                horizontalSizeClass: horizontalSizeClass,
+                                verticalSizeClass: verticalSizeClass
+                            ),
+                            alignment: .leading,
+                            spacing: VideoGridLayout.spacing
+                        ) {
+                            ForEach(authStore.viewingHistory) { topic in
+                                if let item = topic.feedItem {
+                                    NavigationLink(value: item) {
+                                        ViewingHistoryRowView(topic: topic)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                         
@@ -59,6 +72,11 @@ struct ViewingHistoryView: View {
                         }
                     }
                     .padding()
+                    .onGeometryChange(for: CGFloat.self) {
+                        $0.size.width
+                    } action: {
+                        contentWidth = $0
+                    }
                 }
                 .refreshable {
                     await authStore.loadViewingHistory()
