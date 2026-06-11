@@ -9,6 +9,7 @@ nonisolated struct SasflixTopic: Decodable, Identifiable, Sendable {
     let cover: SasflixTopicCover?
     let category: SasflixTopicCategory?
     let favoriteAt: Date?
+    
     let access: Bool
     let hasVideo: Bool
     let video: SasflixVideo?
