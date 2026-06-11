@@ -1,21 +1,21 @@
 import SwiftUI
 
 struct FeedView: View {
-    @Bindable var viewModel: FeedVM
+    @Bindable var vm: FeedVM
     
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
-                CategoryPickerView(selectedCategory: $viewModel.selectedCategory)
+                CategoryPickerView(selectedCategory: $vm.selectedCategory)
                 
-                if let featuredItem = viewModel.featuredItem {
+                if let featuredItem = vm.featuredItem {
                     NavigationLink(value: featuredItem) {
                         FeedHeroView(item: featuredItem)
                     }
                     .buttonStyle(.plain)
                 }
                 
-                ForEach(viewModel.listItems) { item in
+                ForEach(vm.listItems) { item in
                     NavigationLink(value: item) {
                         FeedItemRowView(item: item)
                     }
@@ -25,21 +25,21 @@ struct FeedView: View {
             .padding()
         }
         .navigationTitle("Сасфликс")
-        .searchable(text: $viewModel.searchText, prompt: "Поиск")
+        .searchable(text: $vm.searchText, prompt: "Поиск")
         .refreshable {
-            await viewModel.load()
+            await vm.load()
         }
         .task {
-            await viewModel.loadIfNeeded()
+            await vm.loadIfNeeded()
         }
         .overlay {
-            if viewModel.isLoading, viewModel.items.isEmpty {
+            if vm.isLoading, vm.items.isEmpty {
                 LoadingStateView("Загружаем ленту")
                 
-            } else if let errorMessage = viewModel.errorMessage, viewModel.items.isEmpty {
+            } else if let errorMessage = vm.errorMessage, vm.items.isEmpty {
                 EmptyStateView(title: "Нет соединения", systemImage: "wifi.exclamationmark", message: errorMessage)
                 
-            } else if viewModel.visibleItems.isEmpty, !viewModel.items.isEmpty {
+            } else if vm.visibleItems.isEmpty, !vm.items.isEmpty {
                 EmptyStateView(title: "Ничего не найдено", systemImage: "magnifyingglass", message: "Попробуйте другой запрос или категорию")
             }
         }

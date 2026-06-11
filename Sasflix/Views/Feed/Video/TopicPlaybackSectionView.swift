@@ -1,29 +1,30 @@
 import SwiftUI
 
 struct TopicPlaybackSectionView: View {
+    @State private var vm = TopicPlaybackVM()
     @Environment(AuthenticationStore.self) private var authStore
-    @State private var viewModel = TopicPlaybackVM()
+    
     let item: FeedItem
     
     var body: some View {
         Group {
-            if let video = viewModel.video {
-                TopicVideoPlayerView(video: video, fallbackPosterURL: item.posterURL, authorizationHeader: viewModel.authorizationHeader)
-            } else if viewModel.isLoading {
+            if let video = vm.video {
+                TopicVideoPlayerView(video: video, fallbackPosterURL: item.posterURL, authorizationHeader: vm.authorizationHeader)
+            } else if vm.isLoading {
                 ZStack {
                     RemotePosterView(url: item.posterURL)
                     
                     ProgressView()
                         .controlSize(.large)
                 }
-            } else if viewModel.isLocked {
+            } else if vm.isLocked {
                 TopicPlaybackStatusView(
                     posterURL: item.posterURL,
                     title: lockedTitle,
                     systemImage: "lock.fill",
                     message: lockedMessage
                 )
-            } else if let errorMessage = viewModel.errorMessage {
+            } else if let errorMessage = vm.errorMessage {
                 TopicPlaybackStatusView(
                     posterURL: item.posterURL,
                     title: "Видео недоступно",
@@ -35,7 +36,7 @@ struct TopicPlaybackSectionView: View {
             }
         }
         .task(id: loadIdentifier) {
-            await viewModel.load(item: item)
+            await vm.load(item: item)
         }
     }
     

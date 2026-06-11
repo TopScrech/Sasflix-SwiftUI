@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: AppTab = .feed
-    @State private var feedViewModel = FeedVM()
+    @State private var feedVM = FeedVM()
     @State private var bookmarkStore = BookmarkStore()
     @State private var authenticationStore = AuthenticationStore()
     
@@ -10,7 +10,7 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             Tab(AppTab.feed.title, systemImage: AppTab.feed.systemImage, value: AppTab.feed) {
                 NavigationStack {
-                    FeedView(viewModel: feedViewModel)
+                    FeedView(vm: feedVM)
                 }
             }
             
