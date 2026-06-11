@@ -92,6 +92,21 @@ nonisolated struct AuthenticationService: Sendable {
         return try JSONDecoder().decode(SasflixTopic.self, from: data)
     }
     
+    func loadBlogPosts(token: String, offset: Int, limit: Int) async throws -> BlogPostsResponse {
+        let request = try makeRequest(
+            path: "web/blog/posts",
+            method: "GET",
+            token: token,
+            queryItems: [
+                URLQueryItem(name: "active", value: "1"),
+                URLQueryItem(name: "offset", value: String(offset)),
+                URLQueryItem(name: "limit", value: String(limit))
+            ]
+        )
+        let data = try await responseData(for: request)
+        return try JSONDecoder().decode(BlogPostsResponse.self, from: data)
+    }
+    
     func addFavoriteTopic(id: Int, token: String) async throws {
         let request = try makeRequest(path: "user/favorite/topics/\(id)", method: "PUT", token: token)
         _ = try await responseData(for: request)

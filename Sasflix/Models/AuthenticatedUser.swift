@@ -5,6 +5,7 @@ nonisolated struct AuthenticatedUser: Decodable, Equatable, Identifiable, Sendab
     let username: String?
     let fullname: String?
     let email: String?
+    let canReadBlog: Bool
     let subscription: SasflixSubscription?
     
     var displayName: String {
@@ -25,6 +26,7 @@ nonisolated struct AuthenticatedUser: Decodable, Equatable, Identifiable, Sendab
     
     enum CodingKeys: String, CodingKey {
         case id, username, fullname, email, subscription
+        case canReadBlog = "blog"
     }
     
     init(from decoder: Decoder) throws {
@@ -34,6 +36,7 @@ nonisolated struct AuthenticatedUser: Decodable, Equatable, Identifiable, Sendab
         username = try container.decodeIfPresent(String.self, forKey: .username)
         fullname = try container.decodeIfPresent(String.self, forKey: .fullname)
         email = try container.decodeIfPresent(String.self, forKey: .email)
+        canReadBlog = container.decodeFlexibleBool(forKey: .canReadBlog) ?? false
         subscription = try? container.decodeIfPresent(SasflixSubscription.self, forKey: .subscription)
     }
 }
