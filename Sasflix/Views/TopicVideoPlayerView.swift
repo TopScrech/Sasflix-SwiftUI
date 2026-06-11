@@ -6,6 +6,7 @@ struct TopicVideoPlayerView: View {
     let video: SasflixVideo
     let fallbackPosterURL: URL?
     let authorizationHeader: String?
+    let localFileURL: URL?
     @State private var player: AVPlayer?
     @State private var isPresentingFullScreen = false
     
@@ -35,17 +36,17 @@ struct TopicVideoPlayerView: View {
     }
     
     private func startPlayback() {
-        guard let streamURL = video.streamURL else {
+        guard let playbackURL else {
             return
         }
         
         configureAudioSession()
         
-        let asset = AVURLAsset(url: streamURL, options: assetOptions)
+        let asset = AVURLAsset(url: playbackURL, options: assetOptions)
         let item = AVPlayerItem(asset: asset)
         let player = AVPlayer(playerItem: item)
         
-        if let time = video.time, time > 0 {
+        if localFileURL == nil, let time = video.time, time > 0 {
             player.seek(to: CMTime(seconds: time, preferredTimescale: 600))
         }
         
@@ -73,7 +74,7 @@ struct TopicVideoPlayerView: View {
     }
     
     private var assetOptions: [String: Any]? {
-        guard let authorizationHeader else {
+        guard localFileURL == nil, let authorizationHeader else {
             return nil
         }
         
@@ -82,5 +83,9 @@ struct TopicVideoPlayerView: View {
                 "Authorization": authorizationHeader
             ]
         ]
+    }
+    
+    private var playbackURL: URL? {
+        localFileURL ?? video.streamURL
     }
 }

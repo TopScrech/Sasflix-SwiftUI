@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var blogVM = BlogVM()
     @State private var bookmarkStore = BookmarkStore()
     @State private var authenticationStore = AuthenticationStore()
+    @State private var videoDownloadStore = VideoDownloadStore()
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -29,7 +30,9 @@ struct ContentView: View {
         }
         .environment(bookmarkStore)
         .environment(authenticationStore)
+        .environment(videoDownloadStore)
         .task {
+            videoDownloadStore.load()
             await authenticationStore.restoreSession()
             await bookmarkStore.loadSavedItems()
         }

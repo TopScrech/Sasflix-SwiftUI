@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct VideoView: View {
-    @Environment(\.openURL) private var openURL
     @Environment(BookmarkStore.self) private var bookmarkStore
     @Environment(AuthenticationStore.self) private var authStore
     
@@ -25,10 +24,6 @@ struct VideoView: View {
                 Text(item.publishedAt, format: .dateTime.day().month(.wide).year().hour().minute())
                     .subheadline()
                     .secondary()
-                
-                Button("Открыть на сайте", systemImage: "safari", action: openOfficialPage)
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
             }
             .padding()
         }
@@ -41,10 +36,6 @@ struct VideoView: View {
                     .disabled(authStore.user == nil || bookmarkStore.isUpdating(item))
             }
         }
-    }
-    
-    private func openOfficialPage() {
-        openURL(item.link)
     }
     
     private func toggleSaved() {

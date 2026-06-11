@@ -3,13 +3,27 @@ import SwiftUI
 struct TopicPlaybackSectionView: View {
     @State private var vm = TopicPlaybackVM()
     @Environment(AuthenticationStore.self) private var authStore
+    @Environment(VideoDownloadStore.self) private var downloadStore
     
     let item: FeedItem
     
     var body: some View {
         Group {
             if let video = vm.video {
-                TopicVideoPlayerView(video: video, fallbackPosterURL: item.posterURL, authorizationHeader: vm.authorizationHeader)
+                VStack(alignment: .leading) {
+                    TopicVideoPlayerView(
+                        video: video,
+                        fallbackPosterURL: item.posterURL,
+                        authorizationHeader: vm.authorizationHeader,
+                        localFileURL: downloadStore.localFileURL(for: video)
+                    )
+                    
+                    VideoDownloadControlView(
+                        item: item,
+                        video: video,
+                        authorizationHeader: vm.authorizationHeader
+                    )
+                }
             } else if vm.isLoading {
                 ZStack {
                     RemotePosterView(url: item.posterURL)

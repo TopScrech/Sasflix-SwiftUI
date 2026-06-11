@@ -55,6 +55,14 @@ struct FeedView: View {
                 .accessibilityLabel("Топ пользователей")
                 
                 NavigationLink {
+                    DownloadedVideosView()
+                } label: {
+                    Image(systemName: "arrow.down.circle")
+                        .frame(32)
+                }
+                .accessibilityLabel("Загрузки")
+                
+                NavigationLink {
                     SavedView()
                 } label: {
                     Image(systemName: "bookmark.fill")
