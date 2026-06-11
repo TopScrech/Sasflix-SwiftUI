@@ -22,7 +22,7 @@ struct SavedView: View {
         }
         .navigationTitle("Закладки")
         .navigationDestination(for: FeedItem.self) {
-            FeedDetailView(item: $0)
+            VideoView(item: $0)
         }
     }
 }

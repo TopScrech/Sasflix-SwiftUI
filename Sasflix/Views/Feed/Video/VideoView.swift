@@ -1,9 +1,10 @@
 import SwiftUI
 
-struct FeedDetailView: View {
+struct VideoView: View {
     @Environment(\.openURL) private var openURL
     @Environment(BookmarkStore.self) private var bookmarkStore
     @Environment(AuthenticationStore.self) private var authStore
+    
     let item: FeedItem
     
     var body: some View {
@@ -28,19 +29,14 @@ struct FeedDetailView: View {
                 Button("Открыть на сайте", systemImage: "safari", action: openOfficialPage)
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
-                
-                ShareLink(item: item.link) {
-                    Label("Поделиться", systemImage: "square.and.arrow.up")
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
             }
             .padding()
         }
-        .navigationTitle("Видео")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                ShareLink(item: item.link)
+                
                 Button(bookmarkStore.isSaved(item) ? "Убрать" : "Сохранить", systemImage: bookmarkStore.isSaved(item) ? "bookmark.fill" : "bookmark", action: toggleSaved)
                     .disabled(authStore.user == nil || bookmarkStore.isUpdating(item))
             }

@@ -63,7 +63,7 @@ struct ViewingHistoryView: View {
         }
         .navigationTitle("История")
         .navigationDestination(for: FeedItem.self) {
-            FeedDetailView(item: $0)
+            VideoView(item: $0)
         }
         .task {
             await authStore.loadViewingHistoryIfNeeded()
