@@ -15,9 +15,22 @@
 		200000000000000000000016 /* Sasflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sasflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F327EC5A2FDA3BC9006D823A /* Exceptions for "Sasflix" folder in "Sasflix" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 400000000000000000000001 /* Sasflix */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F3875FDE2FDA1A3B00A0340F /* Sasflix */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F327EC5A2FDA3BC9006D823A /* Exceptions for "Sasflix" folder in "Sasflix" target */,
+			);
 			path = Sasflix;
 			sourceTree = "<group>";
 		};
@@ -272,7 +285,9 @@
 				DEVELOPMENT_TEAM = 8FQUA2F388;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sasflix/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sasflix;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -302,7 +317,9 @@
 				DEVELOPMENT_TEAM = 8FQUA2F388;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sasflix/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sasflix;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
