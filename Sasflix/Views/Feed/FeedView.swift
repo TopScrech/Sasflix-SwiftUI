@@ -3,6 +3,7 @@ import SwiftUI
 struct FeedView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @AppStorage(DebugSettingKey.hideSubscriptionRequiredVideos) private var hideSubscriptionRequiredVideos = true
     @State private var contentWidth: CGFloat = 0
     @Bindable var vm: FeedVM
     
@@ -11,7 +12,7 @@ struct FeedView: View {
             LazyVStack(alignment: .leading) {
                 CategoryPickerView(selectedCategory: $vm.selectedCategory)
                 
-                if let featuredItem = vm.featuredItem {
+                if let featuredItem {
                     NavigationLink(value: featuredItem) {
                         FeedHeroView(item: featuredItem)
                     }
@@ -27,7 +28,7 @@ struct FeedView: View {
                     alignment: .leading,
                     spacing: VideoGridLayout.spacing
                 ) {
-                    ForEach(vm.listItems) { item in
+                    ForEach(listItems) { item in
                         NavigationLink(value: item) {
                             FeedItemRowView(item)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,7 +87,7 @@ struct FeedView: View {
             } else if let errorMessage = vm.errorMessage, vm.items.isEmpty {
                 EmptyStateView(title: "Нет соединения", systemImage: "wifi.exclamationmark", message: errorMessage)
                 
-            } else if vm.visibleItems.isEmpty, !vm.items.isEmpty {
+            } else if visibleItems.isEmpty, !vm.items.isEmpty {
                 EmptyStateView(title: "Ничего не найдено", systemImage: "magnifyingglass", message: "Попробуйте другой запрос или категорию")
             }
         }
@@ -95,4 +96,15 @@ struct FeedView: View {
         }
     }
     
+    private var visibleItems: [FeedItem] {
+        vm.visibleItems(hideSubscriptionRequiredVideos: hideSubscriptionRequiredVideos)
+    }
+    
+    private var featuredItem: FeedItem? {
+        vm.featuredItem(hideSubscriptionRequiredVideos: hideSubscriptionRequiredVideos)
+    }
+    
+    private var listItems: [FeedItem] {
+        vm.listItems(hideSubscriptionRequiredVideos: hideSubscriptionRequiredVideos)
+    }
 }

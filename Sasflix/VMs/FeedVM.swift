@@ -14,17 +14,20 @@ final class FeedVM {
         self.feedService = feedService
     }
     
-    var visibleItems: [FeedItem] {
+    func visibleItems(hideSubscriptionRequiredVideos: Bool) -> [FeedItem] {
         items.filter {
-            selectedCategory.matches($0) && matchesSearch($0)
+            selectedCategory.matches($0)
+            && matchesSearch($0)
+            && (!hideSubscriptionRequiredVideos || !$0.requiresSubscription)
         }
     }
     
-    var featuredItem: FeedItem? {
-        visibleItems.first
+    func featuredItem(hideSubscriptionRequiredVideos: Bool) -> FeedItem? {
+        visibleItems(hideSubscriptionRequiredVideos: hideSubscriptionRequiredVideos).first
     }
     
-    var listItems: [FeedItem] {
+    func listItems(hideSubscriptionRequiredVideos: Bool) -> [FeedItem] {
+        let visibleItems = visibleItems(hideSubscriptionRequiredVideos: hideSubscriptionRequiredVideos)
         guard !visibleItems.isEmpty else { return [] }
         return Array(visibleItems.dropFirst())
     }
