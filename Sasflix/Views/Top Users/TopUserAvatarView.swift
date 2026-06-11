@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TopUserAvatar: View {
+struct TopUserAvatarView: View {
     let url: URL?
     
     var body: some View {

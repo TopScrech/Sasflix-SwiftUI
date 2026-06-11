@@ -10,7 +10,7 @@ struct TopUserRowView: View {
                 .monospacedDigit()
                 .secondary()
             
-            TopUserAvatar(url: user.avatar?.imageURL)
+            TopUserAvatarView(url: user.avatar?.imageURL)
             
             VStack(alignment: .leading) {
                 Text(user.displayName)
