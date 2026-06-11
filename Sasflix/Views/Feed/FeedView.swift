@@ -25,6 +25,26 @@ struct FeedView: View {
             .padding()
         }
         .navigationTitle("Сасфликс")
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                NavigationLink {
+                    TopUsersView()
+                } label: {
+                    Image(systemName: "person.2")
+                        .frame(32)
+                }
+                .accessibilityLabel("Топ пользователей")
+                
+                NavigationLink {
+                    SavedView()
+                } label: {
+                    Image(systemName: "bookmark.fill")
+                        .foregroundStyle(.yellow.gradient)
+                        .frame(32)
+                }
+                .accessibilityLabel("Закладки")
+            }
+        }
         .searchable(text: $vm.searchText, prompt: "Поиск")
         .refreshable {
             await vm.load()

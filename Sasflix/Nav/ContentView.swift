@@ -15,12 +15,6 @@ struct ContentView: View {
                 }
             }
             
-            Tab(AppTab.saved.title, systemImage: AppTab.saved.systemImage, value: AppTab.saved) {
-                NavigationStack {
-                    SavedView()
-                }
-            }
-            
             Tab(AppTab.blog.title, systemImage: AppTab.blog.systemImage, value: AppTab.blog) {
                 NavigationStack {
                     BlogView(vm: blogVM)
