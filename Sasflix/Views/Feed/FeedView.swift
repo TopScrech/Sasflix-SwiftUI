@@ -17,6 +17,9 @@ struct FeedView: View {
                         FeedHeroView(item: featuredItem)
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        FeedItemContextMenuView(item: featuredItem)
+                    }
                 }
                 
                 LazyVGrid(
@@ -34,6 +37,9 @@ struct FeedView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(.plain)
+                        .contextMenu {
+                            FeedItemContextMenuView(item: item)
+                        }
                     }
                 }
             }

@@ -15,7 +15,7 @@ struct BlogView: View {
             }
         }
         .navigationTitle("Блог")
-        .searchable(text: $vm.searchText, prompt: "Поиск")
+        .blogSearch(isVisible: authStore.user != nil, text: $vm.searchText)
         .onChange(of: authStore.user?.id) { _, _ in
             vm.reset()
             
