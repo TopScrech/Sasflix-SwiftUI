@@ -48,16 +48,15 @@ struct AccountSettings: View {
                 Button("Открыть RSS", systemImage: "dot.radiowaves.left.and.right", action: openRSS)
                 Button("Поддержка", systemImage: "envelope", action: openSupport)
             }
-            
-            Section("О приложении") {
-                LabeledContent("Источник", value: "sasflix.ru/rss.xml")
-                
-                if let version = Bundle.version {
-                    LabeledContent("Версия", value: "v\(version)")
-                }
-            }
         }
         .navigationTitle("Аккаунт")
+        .toolbar {
+            NavigationLink {
+                DebugSettings()
+            } label: {
+                Label("Debug", systemImage: "hammer")
+            }
+        }
     }
     
     private func openSite() {
