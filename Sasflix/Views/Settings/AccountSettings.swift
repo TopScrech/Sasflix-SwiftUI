@@ -113,6 +113,7 @@ struct AccountSettings: View {
             } label: {
                 Label("Debug", systemImage: "hammer")
             }
+            .opacity(0)
         }
     }
     

@@ -9,7 +9,7 @@ nonisolated enum AppTab: Hashable, CaseIterable, Identifiable, Sendable {
         switch self {
         case .feed: "Лента"
         case .blog: "Блог"
-        case .more: "Аккаунт"
+        case .more: "Настройки"
         }
     }
     
@@ -17,7 +17,7 @@ nonisolated enum AppTab: Hashable, CaseIterable, Identifiable, Sendable {
         switch self {
         case .feed: "play.rectangle"
         case .blog: "text.page"
-        case .more: "person.crop.circle"
+        case .more: "gear"
         }
     }
 }
