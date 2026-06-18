@@ -12,7 +12,7 @@ nonisolated enum FeedCategory: String, CaseIterable, Identifiable, Codable, Send
         case .solovev: "Соловьёв Live"
         case .commentator: "Комментатор"
         case .trainings: "Тренировки"
-        case .critic: "Икиностас"
+        case .critic: "Киностас"
         case .documentary: "Докфильм"
         case .review: "Разбор"
         case .techno: "Техно"
