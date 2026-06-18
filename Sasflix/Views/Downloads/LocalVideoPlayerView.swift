@@ -51,11 +51,13 @@ struct LocalVideoPlayerView: View {
             return
         }
         
-        configureAudioSession()
-        let asset = AVURLAsset(url: fileURL)
-        let player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
-        self.player = player
-        player.playAtSavedPlaybackSpeed()
+        Task {
+            await VideoAudioSession.configureForPlayback()
+            let asset = AVURLAsset(url: fileURL)
+            let player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
+            self.player = player
+            player.playAtSavedPlaybackSpeed()
+        }
     }
     
     private func resetPlayback() {
@@ -64,12 +66,4 @@ struct LocalVideoPlayerView: View {
         isPresentingFullScreen = false
     }
     
-    private func configureAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            assertionFailure("Failed to configure video audio session: \(error.localizedDescription)")
-        }
-    }
 }
