@@ -21,9 +21,9 @@ nonisolated enum FeedCategory: String, CaseIterable, Identifiable, Codable, Send
         }
     }
     
-    var systemImage: String {
+    var systemImage: String? {
         switch self {
-        case .all: "sparkles"
+        case .all: nil
         case .topics: "play.square.stack"
         case .solovev: "tv"
         case .commentator: "mic"

@@ -31,7 +31,14 @@ struct TopicVideoPlayerView: View {
         .aspectRatio(16 / 9, contentMode: .fit)
         .clipShape(.rect(cornerRadius: 8))
         .onChange(of: video.id) { _, _ in
-            resetPlayback()
+            stopPlayback()
+        }
+        .onDisappear {
+            guard !isPresentingFullScreen else {
+                return
+            }
+            
+            stopPlayback()
         }
     }
     
@@ -55,12 +62,9 @@ struct TopicVideoPlayerView: View {
         player.play()
     }
     
-    private func pausePlayback() {
+    private func stopPlayback() {
         player?.pause()
-    }
-    
-    private func resetPlayback() {
-        player?.pause()
+        player?.replaceCurrentItem(with: nil)
         player = nil
         isPresentingFullScreen = false
     }

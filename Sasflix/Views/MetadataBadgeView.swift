@@ -5,14 +5,24 @@ struct MetadataBadgeView: View {
     
     var body: some View {
 #if DEBUG
-        Label(category.title, systemImage: category.systemImage)
-            .caption()
-            .secondary()
+        if let systemImage = category.systemImage {
+            Label(category.title, systemImage: systemImage)
+                .caption()
+                .secondary()
+        } else {
+            Text(category.title)
+                .caption()
+                .secondary()
+        }
 #else
         if category == .solovev {
             EmptyView()
+        } else if let systemImage = category.systemImage {
+            Label(category.title, systemImage: systemImage)
+                .caption()
+                .secondary()
         } else {
-            Label(category.title, systemImage: category.systemImage)
+            Text(category.title)
                 .caption()
                 .secondary()
         }

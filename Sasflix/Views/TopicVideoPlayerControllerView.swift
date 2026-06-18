@@ -31,6 +31,13 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         }
     }
     
+    static func dismantleUIViewController(_ controller: AVPlayerViewController, coordinator: Coordinator) {
+        controller.player?.pause()
+        controller.player?.replaceCurrentItem(with: nil)
+        controller.player = nil
+        coordinator.stopObservingSelectedSpeed()
+    }
+    
     final class Coordinator: NSObject, AVPlayerViewControllerDelegate {
         @Binding var isPresentingFullScreen: Bool
         private var selectedSpeedObservation: NSKeyValueObservation?
@@ -55,6 +62,11 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
                     PlaybackSpeedStore().save(rate: rate)
                 }
             }
+        }
+        
+        func stopObservingSelectedSpeed() {
+            selectedSpeedObservation?.invalidate()
+            selectedSpeedObservation = nil
         }
         
         func playerViewControllerWillBeginFullScreenPresentation(_ playerViewController: AVPlayerViewController) {
