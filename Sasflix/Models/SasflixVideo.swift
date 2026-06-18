@@ -9,6 +9,10 @@ nonisolated struct SasflixVideo: Decodable, Hashable, Sendable {
     var streamURL: URL? {
         URL(string: "https://sasflix.ru/api/video/\(id)")
     }
+
+    var compatibilityStreamURL: URL? {
+        streamURL?.appending(path: "240")
+    }
     
     var posterURL: URL? {
         URL(string: "https://sasflix.ru/api/poster/\(id)/800")
