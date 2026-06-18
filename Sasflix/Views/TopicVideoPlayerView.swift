@@ -52,14 +52,13 @@ struct TopicVideoPlayerView: View {
         let asset = AVURLAsset(url: playbackURL, options: assetOptions)
         let item = AVPlayerItem(asset: asset)
         let player = AVPlayer(playerItem: item)
-        player.defaultRate = PlaybackSpeedStore().rate
         
         if localFileURL == nil, let time = video.time, time > 0 {
             player.seek(to: CMTime(seconds: time, preferredTimescale: 600))
         }
         
         self.player = player
-        player.play()
+        player.playAtSavedPlaybackSpeed()
     }
     
     private func stopPlayback() {

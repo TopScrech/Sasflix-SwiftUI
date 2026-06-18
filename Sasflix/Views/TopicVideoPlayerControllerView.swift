@@ -19,7 +19,7 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         controller.showsPlaybackControls = true
         controller.updatesNowPlayingInfoCenter = true
         controller.delegate = context.coordinator
-        context.coordinator.observeSelectedSpeed(on: controller)
+        context.coordinator.observePlaybackRate(on: player)
         return controller
     }
     
@@ -28,6 +28,7 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         
         if controller.player !== player {
             controller.player = player
+            context.coordinator.observePlaybackRate(on: player)
         }
     }
     
@@ -35,12 +36,12 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         controller.player?.pause()
         controller.player?.replaceCurrentItem(with: nil)
         controller.player = nil
-        coordinator.stopObservingSelectedSpeed()
+        coordinator.stopObservingPlaybackRate()
     }
     
     final class Coordinator: NSObject, AVPlayerViewControllerDelegate {
         @Binding var isPresentingFullScreen: Bool
-        private var selectedSpeedObservation: NSKeyValueObservation?
+        private var playbackRateObservation: NSKeyValueObservation?
         
         init(isPresentingFullScreen: Binding<Bool>) {
             _isPresentingFullScreen = isPresentingFullScreen
@@ -50,13 +51,12 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
             _isPresentingFullScreen = isPresentingFullScreen
         }
         
-        func observeSelectedSpeed(on controller: AVPlayerViewController) {
-            selectedSpeedObservation = controller.observe(\.selectedSpeed, options: [.new]) { _, change in
-                guard let selectedSpeed = change.newValue, let speed = selectedSpeed else {
+        func observePlaybackRate(on player: AVPlayer) {
+            playbackRateObservation?.invalidate()
+            playbackRateObservation = player.observe(\.rate, options: [.new]) { _, change in
+                guard let rate = change.newValue, rate.isFinite, rate > 0 else {
                     return
                 }
-                
-                let rate = speed.rate
                 
                 Task { @MainActor in
                     PlaybackSpeedStore().save(rate: rate)
@@ -64,9 +64,9 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
             }
         }
         
-        func stopObservingSelectedSpeed() {
-            selectedSpeedObservation?.invalidate()
-            selectedSpeedObservation = nil
+        func stopObservingPlaybackRate() {
+            playbackRateObservation?.invalidate()
+            playbackRateObservation = nil
         }
         
         func playerViewControllerWillBeginFullScreenPresentation(_ playerViewController: AVPlayerViewController) {
