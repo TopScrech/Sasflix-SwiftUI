@@ -51,8 +51,10 @@ struct LocalVideoPlayerView: View {
         
         configureAudioSession()
         let asset = AVURLAsset(url: fileURL)
-        player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
-        player?.play()
+        let player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
+        player.defaultRate = PlaybackSpeedStore().rate
+        self.player = player
+        player.play()
     }
     
     private func resetPlayback() {

@@ -19,6 +19,7 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         controller.showsPlaybackControls = true
         controller.updatesNowPlayingInfoCenter = true
         controller.delegate = context.coordinator
+        context.coordinator.observeSelectedSpeed(on: controller)
         return controller
     }
     
@@ -32,6 +33,7 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
     
     final class Coordinator: NSObject, AVPlayerViewControllerDelegate {
         @Binding var isPresentingFullScreen: Bool
+        private var selectedSpeedObservation: NSKeyValueObservation?
         
         init(isPresentingFullScreen: Binding<Bool>) {
             _isPresentingFullScreen = isPresentingFullScreen
@@ -39,6 +41,20 @@ struct TopicVideoPlayerControllerView: UIViewControllerRepresentable {
         
         func update(isPresentingFullScreen: Binding<Bool>) {
             _isPresentingFullScreen = isPresentingFullScreen
+        }
+        
+        func observeSelectedSpeed(on controller: AVPlayerViewController) {
+            selectedSpeedObservation = controller.observe(\.selectedSpeed, options: [.new]) { _, change in
+                guard let selectedSpeed = change.newValue, let speed = selectedSpeed else {
+                    return
+                }
+                
+                let rate = speed.rate
+                
+                Task { @MainActor in
+                    PlaybackSpeedStore().save(rate: rate)
+                }
+            }
         }
         
         func playerViewControllerWillBeginFullScreenPresentation(_ playerViewController: AVPlayerViewController) {
