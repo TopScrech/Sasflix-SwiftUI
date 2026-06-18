@@ -19,7 +19,9 @@ struct LocalVideoPlayerView: View {
                         
                         if #available(iOS 26, *) {
                             Button("Смотреть", systemImage: "play.fill", action: startPlayback)
+#if !os(visionOS)
                                 .buttonStyle(.glassProminent)
+#endif
                                 .controlSize(.large)
                         } else {
                             Button("Смотреть", systemImage: "play.fill", action: startPlayback)
