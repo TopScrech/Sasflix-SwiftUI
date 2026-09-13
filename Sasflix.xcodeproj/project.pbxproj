@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 100;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -119,7 +119,7 @@
 			packageReferences = (
 				F38761232FDA2B4E00A0340F /* XCRemoteSwiftPackageReference "ScrechKit" */,
 			);
-			preferredProjectObjectVersion = 100;
+			preferredProjectObjectVersion = 110;
 			productRefGroup = 300000000000000000000008 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -304,6 +304,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFTUI_VIEW_BODY_LIMIT = 120;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27;
 			};
 			name = Debug;
 		};
@@ -336,6 +337,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFTUI_VIEW_BODY_LIMIT = 120;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27;
 			};
 			name = Release;
 		};
